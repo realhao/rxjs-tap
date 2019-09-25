@@ -72,9 +72,9 @@ setTimeout(() => {
   const g22 = get(2).subscribe(
     (v) => console.log(`+++ g2 ${v}`)
   )
-  console.log(t.g2)
+  console.log(g22, publish);
   subscribe.unsubscribe()
 
-  setTimeout(() => g22.unsubscribe());
+  setTimeout(() => g22.unsubscribe(), 5 * 1000);
 }, 15 * 1000)
 
