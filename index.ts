@@ -66,10 +66,12 @@ setTimeout(() => {
 }, 10 * 1000)
 
 setTimeout(() => {
-  get(2).subscribe(
+  const g22 = get(2).subscribe(
     (v) => console.log(`+++ g2 ${v}`)
   )
   console.log(t.g2)
   subscribe.unsubscribe()
+
+  setTimeout(() => g22.unsubscribe());
 }, 15 * 1000)
 
