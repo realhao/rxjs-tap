@@ -11,6 +11,8 @@ const subscribe = source.subscribe(val => console.log(val));
 
 const publish = new Subject();
 
+window.publish = publish;
+
 source.subscribe((val) => publish.next(val));
 
 const get = (v) => publish.pipe(
