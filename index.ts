@@ -59,6 +59,7 @@ class Test {
 }
 
 const t = new Test();
+window.t = t;
 t.init();
 
 setTimeout(() => {
