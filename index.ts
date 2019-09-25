@@ -21,38 +21,55 @@ const get = (v) => publish.pipe(
   refCount(),
 );
 
-const bs = new BehaviorSubject(undefined);
+class Test {
+  bs = new BehaviorSubject(undefined)
+  g2 = null
+  g02 = null
 
-const t = tap((v) => {
-  console.log(`g2 tap ${v}`)
-  bs.next((bsv) => console.log(`bsv ${bsv}`, bs))
-  return (s) => {
-    console.log('unscribe~', s)
+  s1 = null
+  s2 = null
+
+  init() {
+    this.g02 = get(2);
+    this.g2 = this.g02.pipe(
+      tap((v) => {
+        console.log(`g2 tap ${v}`)
+        this.bs.next((bsv) => console.log(`bsv ${bsv}`))
+      })
+    );
+
+    console.log(`this.g02 === this.g2 : ${this.g02 === this.g2}`);
+
+    this.s1 = this.g2.subscribe();
+
+    this.s2 = this.bs.subscribe({
+      next: (fn) => {
+        if (fn) {
+          fn();
+        }
+      }
+    });
   }
-})
 
-const g2 = get(2).pipe(
-  t
-).subscribe();
+  destroy() {
+    this.s1.unsubscribe();
+    this.s2.unsubscribe();
+    console.log(this.s1, this.s2, this.g02, this.g2);
+  }
+}
+
+const t = new Test();
+t.init();
 
 setTimeout(() => {
-  bs.subscribe({
-    next: (fn) => {
-      if (fn) {
-        fn();
-      }
-    }
-  })
-}, 10)
-
-
-setTimeout(() => g2.unsubscribe(), 10 * 1000)
+  t.destroy();
+}, 10 * 1000)
 
 setTimeout(() => {
   get(2).subscribe(
     (v) => console.log(`+++ g2 ${v}`)
   )
-  console.log(t)
+  console.log(t.g2)
   subscribe.unsubscribe()
 }, 15 * 1000)
 
