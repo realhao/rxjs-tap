@@ -21,7 +21,8 @@ const publish = new Subject();
 window.publish = publish;
 
 let index = 0;
-setInterval(() => {
+const msgT = setInterval(() => {
+  console.log(`> ${index}`);
   publish.next(index++);
 }, 1000);
 
@@ -57,7 +58,7 @@ class Test {
     this.s2 = this.bs.subscribe({
       next: (fn) => {
         if (fn) {
-          fn();
+          fn('test');
         }
       }
     });
@@ -85,5 +86,8 @@ setTimeout(() => {
   console.log(g22, publish);
 
   setTimeout(() => g22.unsubscribe(), 5 * 1000);
+
+  setTimeout(() => clearInterval(msgT), 8 * 1000);
+
 }, 15 * 1000)
 
